@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "549170642477",
+    "project_id": "chat-53bf1",
+    "storage_bucket": "chat-53bf1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:549170642477:android:6c2a13dff14c40aee382a4",
+        "android_client_info": {
+          "package_name": "amrIbrahem.chat_firebase"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "549170642477-91dnetmpn5gc4lmt9d3njed2qr18khaq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyByeGCiCCL-7AuOS0FnlRt0qqzi2obd_Jw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "549170642477-91dnetmpn5gc4lmt9d3njed2qr18khaq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
