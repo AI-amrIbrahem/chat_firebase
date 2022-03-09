@@ -16,7 +16,7 @@ class HomeLayout extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => HomeCubit()..getUserModel(),
+      create: (context) => RoutesGenerator.homeCubit..getUserModel()..getPosts(),
       child: BlocConsumer<HomeCubit, HomeState>(
         listener: (context, state) {
           if(state is addPostState){
@@ -37,7 +37,7 @@ class HomeLayout extends StatelessWidget {
             ),
             body: Column(
               children: [
-                if(FirebaseAuth.instance.currentUser!.emailVerified == false )
+                if(FirebaseAuth.instance.currentUser!.emailVerified == false &&cubit.currentNav==0)
                 Container(
                   padding: const EdgeInsets.all(8),
                   color: AppColors.primary,
@@ -62,6 +62,8 @@ class HomeLayout extends StatelessWidget {
 
                   ),
                 ),
+
+
                 cubit.screens[cubit.currentNav],
               ],
             ),

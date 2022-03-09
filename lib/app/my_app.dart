@@ -1,3 +1,4 @@
+import 'package:chat_firebase/layout/home_layout.dart';
 import 'package:flutter/material.dart';
 
 import '../resources/app_themes.dart';
@@ -11,7 +12,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       onGenerateRoute: RoutesGenerator.getRoute,
-      initialRoute: Routes.login,
+      initialRoute: true ? Routes.home : Routes.login,
       theme: lightTheme,
       debugShowCheckedModeBanner: false,
     );

@@ -16,40 +16,63 @@ class RegisterCubit extends Cubit<RegisterState> {
   IconData suffix = Icons.visibility_off;
   bool isPassword = true;
 
-  void changePasswordVisiablity(){
+  void changePasswordVisiablity() {
     isPassword = !isPassword;
-    if(isPassword){
+    if (isPassword) {
       suffix = Icons.visibility_off;
-    }else
+    } else
       suffix = Icons.visibility_outlined;
     emit(RegisterChangePasswordState());
   }
 
-
   //Repo repo = Repo();
 
-  static RegisterCubit get(context)=>BlocProvider.of<RegisterCubit>(context);
+  static RegisterCubit get(context) => BlocProvider.of<RegisterCubit>(context);
 
-  void register(String email,String password,String name,String phone)async{
+  void register(
+      String email, String password, String name, String phone) async {
     emit(RegisterLoadingState());
-    FirebaseAuth.instance.createUserWithEmailAndPassword(email: email, password: password).then((value){
-      print(value.user?.email.toString()??"");
-      print(value.user?.uid.toString()??"");
-      userCreate(email: email, name: name, phone: phone, uId: value.user?.uid.toString()??"");
+    FirebaseAuth.instance
+        .createUserWithEmailAndPassword(email: email, password: password)
+        .then((value) {
+      print(value.user?.email.toString() ?? "");
+      print(value.user?.uid.toString() ?? "");
+      userCreate(
+          email: email,
+          name: name,
+          phone: phone,
+          uId: value.user?.uid.toString() ?? "");
       print(1);
       //emit(RegisterSuccessState());
-    }).catchError((error){
+    }).catchError((error) {
       print(12);
       print(error.toString());
       emit(RegisterErrorState(error.toString()));
     });
   }
 
-  void userCreate({required String email,required String name,required String phone,required String uId}){
-    FirebaseFirestore.instance.collection(AppStrings.userCollection).doc(uId).set(UserModel(name: name, email: email, phone: phone, uId: uId).toMap()).then((value){
+  void userCreate(
+      {required String email,
+      required String name,
+      required String phone,
+      required String uId}) {
+    FirebaseFirestore.instance
+        .collection(AppStrings.userCollection)
+        .doc(uId)
+        .set(UserModel(
+                cover:
+                    'https://img.freepik.com/free-photo/portrait-stylish-senior-woman-model_23-2149012660.jpg?w=360',
+                image:
+                    'https://img.freepik.com/free-photo/medium-shot-senior-man-posing_23-2149252814.jpg?w=360',
+                name: name,
+                email: email,
+                phone: phone,
+                uId: uId)
+            .toMap())
+        .then((value) {
       emit(CreateUserSuccessState(uId));
       print(13);
-    }).catchError((error){
+    }).catchError((error) {
       print(14);
       emit(CreateUserErrorState(error.toString()));
     });

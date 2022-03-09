@@ -22,3 +22,28 @@ class getUserErrorState extends HomeState {
 class changeButtonNavState extends HomeState {}
 
 class addPostState extends HomeState {}
+
+class ProfileImageSuccessState extends HomeState {}
+class ProfileImageErrorState extends HomeState {}
+
+class UpdateProfileImageSuccessState extends HomeState {}
+class UpdateProfileImageErrorState extends HomeState {}
+class LoadingUserUpdateState extends HomeState {}
+
+class ProfilePostImageSuccessState extends HomeState {}
+class ProfilePostImageErrorState extends HomeState {}
+
+class CreatePostErrorState extends HomeState {}
+class UploadPostImageSuccessState extends HomeState {}
+class CreatePostSuccessState extends HomeState {}
+class creatPostLoadingState extends HomeState {}
+class UploadingImageLoadingState extends HomeState {}
+class RemovePostImageState extends HomeState {}
+
+class GetPostsSuccessState extends HomeState {}
+class GetPostsErrorState extends HomeState {}
+
+class likeSuccessState extends HomeState {}
+
+class likeErrorState extends HomeState {}
+
