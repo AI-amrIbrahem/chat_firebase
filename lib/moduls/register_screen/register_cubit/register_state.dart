@@ -25,3 +25,4 @@ class CreateUserErrorState extends RegisterState {
 }
 
 class RegisterChangePasswordState extends RegisterState {}
+

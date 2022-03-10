@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:bloc/bloc.dart';
+import 'package:chat_firebase/data/models/message_model.dart';
 import 'package:chat_firebase/data/models/user_model.dart';
 import 'package:chat_firebase/moduls/chats/chat_screen.dart';
 import 'package:chat_firebase/moduls/feeds/feeds_screen.dart';
@@ -55,6 +56,7 @@ class HomeCubit extends Cubit<HomeState> {
   List<String> titles = const ["Home", 'Chats', 'Post', 'Users', 'Setting'];
 
   void changeButtonNav(int index) {
+    if (index == 1) getUsers();
     if (index == 2)
       emit(addPostState());
     else {
@@ -111,7 +113,10 @@ class HomeCubit extends Cubit<HomeState> {
   Future<void> uploadProfImage() async {
     await firebase_storage.FirebaseStorage.instance
         .ref()
-        .child('users/${Uri.file(imageFile!.path).pathSegments.last}')
+        .child('users/${Uri
+        .file(imageFile!.path)
+        .pathSegments
+        .last}')
         .putFile(imageFile!)
         .then((value) async {
       print("x");
@@ -137,7 +142,10 @@ class HomeCubit extends Cubit<HomeState> {
   Future<void> uploadCoverProfImage() async {
     await firebase_storage.FirebaseStorage.instance
         .ref()
-        .child('users/${Uri.file(imageFileCover!.path).pathSegments.last}')
+        .child('users/${Uri
+        .file(imageFileCover!.path)
+        .pathSegments
+        .last}')
         .putFile(imageFileCover!)
         .then((value) async {
       print("x");
@@ -247,7 +255,10 @@ class HomeCubit extends Cubit<HomeState> {
 
     await firebase_storage.FirebaseStorage.instance
         .ref()
-        .child('posts/${Uri.file(imagePost!.path).pathSegments.last}')
+        .child('posts/${Uri
+        .file(imagePost!.path)
+        .pathSegments
+        .last}')
         .putFile(imagePost!)
         .then((value) async {
       print("x");
@@ -311,13 +322,12 @@ class HomeCubit extends Cubit<HomeState> {
         .get()
         .then((value) {
       value.docs.forEach((e) {
-        e.reference.collection('likes').get().then((value){
+        e.reference.collection('likes').get().then((value) {
           likes.add(value.docs.length);
           postsList.add(PostModel.fromJson(e.data()));
           postsListId.add(e.id);
           emit(GetPostsSuccessState());
         });
-
       });
     }).catchError((error) {
       emit(GetPostsErrorState());
@@ -325,19 +335,96 @@ class HomeCubit extends Cubit<HomeState> {
   }
 
   void likePost(String postId) {
-    FirebaseFirestore.instance.collection(AppStrings.postCollection)
-    .doc(postId)
-    .collection('likes')
-    .doc(userModel!.uId)
-    .set({'like':true})
-    .then((value) {
+    FirebaseFirestore.instance
+        .collection(AppStrings.postCollection)
+        .doc(postId)
+        .collection('likes')
+        .doc(userModel!.uId)
+        .set({'like': true}).then((value) {
       postsList = [];
-       postsListId = [];
+      postsListId = [];
       likes = [];
       getPosts();
       //emit(likeSuccessState());
-    }).catchError((error){
+    }).catchError((error) {
       emit(likeErrorState());
+    });
+  }
+
+  List<UserModel> usersList = [];
+
+  void getUsers() {
+    print(5);
+    usersList = [];
+    FirebaseFirestore.instance
+        .collection(AppStrings.userCollection)
+        .get()
+        .then((value) {
+      value.docs.forEach((e) {
+        if (e.data()['uId'] != userModel!.uId)
+          usersList.add(UserModel.fromJson(e.data()));
+        emit(GetAllUsersSuccessState());
+      });
+    }).catchError((error) {
+      emit(GetAllUsersErrorState());
+    });
+  }
+
+  void sendMessage({required String recieverId,
+    required String message,
+    required String dateTime}) {
+    MessageModel model = MessageModel(
+        recieverId: recieverId,
+        senderId: userModel!.uId,
+        dateTime: dateTime,
+        text: message);
+    print(userModel!.uId);
+    print(recieverId);
+    FirebaseFirestore.instance
+        .collection(AppStrings.userCollection)
+        .doc(userModel!.uId)
+        .collection(AppStrings.chatCollection)
+        .doc(recieverId)
+        .collection(AppStrings.messageColloection)
+        .add(model.toMap()).then((value) {
+      emit(SendMessageScuccessState());
+    }).catchError((error) {
+      print(error.toString());
+      emit(SendMessageErrorState());
+    });
+
+    FirebaseFirestore.instance
+        .collection(AppStrings.userCollection)
+        .doc(recieverId)
+        .collection(AppStrings.chatCollection)
+        .doc(userModel!.uId)
+        .collection(AppStrings.messageColloection)
+        .add(model.toMap()).then((value) {
+
+      //getAllMessage(recieverId);
+      emit(SendMessageScuccessState());
+    }).catchError((error) {
+      emit(SendMessageErrorState());
+    });
+  }
+
+  List<MessageModel> messageList = [];
+
+  void getAllMessage(String recivedId) {
+    FirebaseFirestore.instance.collection(AppStrings.userCollection).doc(
+        userModel!.uId).collection(AppStrings.chatCollection)
+        .doc(recivedId)
+        .collection(AppStrings.messageColloection)
+        .orderBy('dateTime')
+        .snapshots()
+        .listen((event) {
+      messageList = [];
+       event.docs.forEach((element) {
+         messageList.add(MessageModel.fromJson(element.data()));
+       });
+
+       print(messageList.length);
+      emit(SendAllMessageScuccessState());
     });
   }
 }

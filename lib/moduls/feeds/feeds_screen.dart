@@ -49,7 +49,7 @@ class FeedsScreen extends StatelessWidget {
               ),
               physics: NeverScrollableScrollPhysics(),
               shrinkWrap: true,
-              itemBuilder: (context, index) => postCard(HomeCubit.get(context).postsList[index],HomeCubit.get(context)!.userModel!,context,index),
+              itemBuilder: (context, index) => postCard(HomeCubit.get(context).postsList[index],HomeCubit.get(context).userModel!,context,index),
               itemCount: HomeCubit.get(context).postsList.length,
             )
           ],

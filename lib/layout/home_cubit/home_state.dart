@@ -47,3 +47,12 @@ class likeSuccessState extends HomeState {}
 
 class likeErrorState extends HomeState {}
 
+class GetAllUsersSuccessState extends HomeState {}
+class GetAllUsersErrorState extends HomeState {}
+
+
+class SendMessageScuccessState extends HomeState {}
+class SendMessageErrorState extends HomeState {}
+
+class SendAllMessageScuccessState extends HomeState {}
+class SendAllMessageErrorState extends HomeState {}

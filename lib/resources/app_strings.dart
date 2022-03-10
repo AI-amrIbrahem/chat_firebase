@@ -52,4 +52,8 @@ class AppStrings{
 
   static const postCollection = 'posts';
 
+  static const chatCollection = 'chats';
+
+  static const messageColloection = 'messages';
+
 }
